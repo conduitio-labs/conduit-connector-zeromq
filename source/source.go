@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/conduitio/conduit-commons/config"
+	"github.com/conduitio/conduit-commons/opencdc"
 	sdk "github.com/conduitio/conduit-connector-sdk"
 	"github.com/oklog/ulid/v2"
 	"github.com/zeromq/goczmq"
@@ -14,7 +16,7 @@ type Source struct {
 
 	config        SourceConfig
 	routerChannel *goczmq.Channeler
-	readBuffer    chan sdk.Record
+	readBuffer    chan opencdc.Record
 }
 
 type SourceConfig struct {
@@ -23,40 +25,42 @@ type SourceConfig struct {
 
 func New() sdk.Source {
 	return sdk.SourceWithMiddleware(&Source{
-		readBuffer: make(chan sdk.Record, 1),
+		readBuffer: make(chan opencdc.Record, 1),
 	}, sdk.DefaultSourceMiddleware()...)
 }
 
-func (s *Source) Parameters() map[string]sdk.Parameter {
+func (s *Source) Parameters() config.Parameters {
 	return s.config.Parameters()
 }
 
-func (s *Source) Configure(ctx context.Context, cfg map[string]string) error {
+func (s *Source) Configure(ctx context.Context, cfg config.Config) error {
 	sdk.Logger(ctx).Info().Msg("Configuring Source...")
-	err := sdk.Util.ParseConfig(cfg, &s.config)
+
+	err := sdk.Util.ParseConfig(ctx, cfg, &s.config, New().Parameters())
 	if err != nil {
-		return fmt.Errorf("invalid config: %w", err)
+		return err
 	}
+
 	return nil
 }
 
-func (s *Source) Open(ctx context.Context, pos sdk.Position) error {
+func (s *Source) Open(ctx context.Context, pos opencdc.Position) error {
 	s.routerChannel = goczmq.NewSubChanneler(s.config.PortBindings, s.config.Topic)
 	go s.listen(ctx)
 
 	return nil
 }
 
-func (s *Source) Read(ctx context.Context) (sdk.Record, error) {
+func (s *Source) Read(ctx context.Context) (opencdc.Record, error) {
 	select {
 	case rec := <-s.readBuffer:
 		return rec, nil
 	case <-ctx.Done():
-		return sdk.Record{}, ctx.Err()
+		return opencdc.Record{}, ctx.Err()
 	}
 }
 
-func (s *Source) Ack(ctx context.Context, position sdk.Position) error {
+func (s *Source) Ack(ctx context.Context, position opencdc.Position) error {
 	return nil
 }
 
@@ -82,12 +86,12 @@ func (s *Source) listen(ctx context.Context) {
 					recUlid := ulid.Make()
 
 					rec := sdk.Util.Source.NewRecordCreate(
-						sdk.Position(string(recFrame)+"_"+recUlid.String()),
-						sdk.Metadata{
+						opencdc.Position(string(recFrame)+"_"+recUlid.String()),
+						opencdc.Metadata{
 							"frame": string(recFrame),
 						},
 						nil,
-						sdk.RawData(recBytes))
+						opencdc.RawData(recBytes))
 
 					s.readBuffer <- rec
 				}

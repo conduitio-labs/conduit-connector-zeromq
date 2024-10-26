@@ -18,4 +18,3 @@ func TestWriteZeroMQ(t *testing.T) {
 	is := is.New(t)
 
 }
-    
