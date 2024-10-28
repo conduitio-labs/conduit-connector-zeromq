@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  zmq:
+    image: zeromq/zeromq
+    ports:
+      - "5555:5555"
