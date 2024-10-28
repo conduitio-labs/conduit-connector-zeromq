@@ -1,3 +1,17 @@
+// Copyright © 2024 Meroxa, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package source
 
 import (
@@ -14,13 +28,9 @@ import (
 type Source struct {
 	sdk.UnimplementedSource
 
-	config        SourceConfig
+	config        Config
 	routerChannel *goczmq.Channeler
 	readBuffer    chan opencdc.Record
-}
-
-type SourceConfig struct {
-	Config
 }
 
 func New() sdk.Source {
@@ -38,13 +48,14 @@ func (s *Source) Configure(ctx context.Context, cfg config.Config) error {
 
 	err := sdk.Util.ParseConfig(ctx, cfg, &s.config, New().Parameters())
 	if err != nil {
-		return err
+		return fmt.Errorf("error parse config: %w", err)
 	}
 
 	return nil
 }
 
-func (s *Source) Open(ctx context.Context, pos opencdc.Position) error {
+func (s *Source) Open(ctx context.Context, _ opencdc.Position) error {
+	sdk.Logger(ctx).Info().Msg("Opening Source...")
 	s.routerChannel = goczmq.NewSubChanneler(s.config.PortBindings, s.config.Topic)
 	go s.listen(ctx)
 
@@ -60,11 +71,12 @@ func (s *Source) Read(ctx context.Context) (opencdc.Record, error) {
 	}
 }
 
-func (s *Source) Ack(ctx context.Context, position opencdc.Position) error {
+func (s *Source) Ack(_ context.Context, _ opencdc.Position) error {
 	return nil
 }
 
 func (s *Source) Teardown(ctx context.Context) error {
+	sdk.Logger(ctx).Info().Msg("Teardown Source...")
 	if s.routerChannel != nil {
 		s.routerChannel.Destroy()
 	}

@@ -1,5 +1,6 @@
 # Conduit Connector for <resource>
-[Conduit](https://conduit.io) for <resource>.
+
+ZeroMQ connector is one of [Conduit](https://github.com/ConduitIO/conduit) plugins. It provides both, a Source and a Destination ZeroMQ connectors.
 
 ## How to build?
 Run `make build` to build the connector.
@@ -10,27 +11,28 @@ Run `make test` to run all the unit tests. Run `make test-integration` to run th
 The Docker compose file at `test/docker-compose.yml` can be used to run the required resource locally.
 
 ## Source
-A source connector pulls data from an external resource and pushes it to downstream resources via Conduit.
+A source is a subscriber that listens to a topic.
 
 ### Configuration
 
 | name                  | description                           | required | default value |
 |-----------------------|---------------------------------------|----------|---------------|
-| `source_config_param` | Description of `source_config_param`. | true     | 1000          |
+| `topic` | Topic is the topic to publish to when receiving a record to write. | true     |           |
+| `portBindings` | PortBindings is a comma separated list of ports that we wish to bind to. | false     |           |
 
 ## Destination
-A destination connector pushes data from upstream resources to an external resource via Conduit.
+A destination is a publisher that writes data to socket.
 
 ### Configuration
 
 | name                       | description                                | required | default value |
 |----------------------------|--------------------------------------------|----------|---------------|
-| `destination_config_param` | Description of `destination_config_param`. | true     | 1000          |
+| `topic` | Topic is the topic to publish to when receiving a record to write. | true     |           |
+| `routerEndpoints` | RouterEndpoints is a comma separated list of socket endpoints that we wish to deal messages to. | true     |           |
 
-## Known Issues & Limitations
-* Known issue A
-* Limitation A
 
-## Planned work
-- [ ] Item A
-- [ ] Item B
+## Useful resources
+* [ZeroMQ Documentation](https://zeromq.org/get-started)
+* [Go Library](https://github.com/zeromq/goczmq)
+
+![scarf pixel](https://static.scarf.sh/a.png?x-pxid=)
