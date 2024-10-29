@@ -1,4 +1,4 @@
-# Conduit Connector for <resource>
+# Conduit Connector for ZeroMQ
 
 ZeroMQ connector is one of [Conduit](https://github.com/ConduitIO/conduit) plugins. It provides both, a Source and a Destination ZeroMQ connectors.
 
@@ -35,4 +35,4 @@ A destination is a publisher that writes data to socket.
 * [ZeroMQ Documentation](https://zeromq.org/get-started)
 * [Go Library](https://github.com/zeromq/goczmq)
 
-![scarf pixel](https://static.scarf.sh/a.png?x-pxid=)
+![scarf pixel](https://static.scarf.sh/a.png?x-pxid=c2ab29c2-181f-49b8-abcc-ac21897048d2)
