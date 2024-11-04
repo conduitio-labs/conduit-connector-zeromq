@@ -20,8 +20,13 @@ jobs:
       - name: Install ZeroMQ
         run: |
           sudo apt-get update
-          sudo apt-get install -y libzmq3-dev
-          
+          sudo apt-get install -y libzmq3-dev libczmq-dev
+
+      - name: Check ZeroMQ and CZMQ installation
+        run: |
+          pkg-config --cflags --libs libzmq
+          pkg-config --cflags --libs libczmq
+
       - name: Golangci-lint version
         id: golangci-lint-version
         run: |
