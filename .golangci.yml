@@ -20,7 +20,7 @@ linters-settings:
       - .WithStack(
       - (context.Context).Err()
   goheader:
-    template-path: '.golangci.goheader.template'
+    template-path: './.golangci.goheader.template'
     values:
       regexp:
         copyright-year: 20[2-9]\d
@@ -39,7 +39,7 @@ linters:
     - errorlint
     - exhaustive
     # - exhaustivestruct
-    - exportloopref
+    - copyloopvar
     # - forbidigo
     - forcetypeassert
     - funlen
@@ -54,7 +54,7 @@ linters:
     - goheader
     - goimports
     - revive # lots of unused parameters in the template, would be helpful for the user to keep them
-    - gomnd
+    - mnd
     - gomoddirectives
     - gomodguard
     - goprintffuncname
