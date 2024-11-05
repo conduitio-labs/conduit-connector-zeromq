@@ -16,5 +16,10 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
+      - name: Install ZeroMQ
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libzmq3-dev libczmq-dev
+
       - name: Test
         run: make test-integration GOTEST_FLAGS="-v -count=1"

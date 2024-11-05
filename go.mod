@@ -1,4 +1,4 @@
-module github.com/mer-oscar/conduit-connector-zeromq
+module github.com/conduitio-labs/conduit-connector-zeromq
 
 go 1.23.2
 

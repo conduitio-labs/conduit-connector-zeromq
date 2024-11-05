@@ -17,7 +17,7 @@ package main
 import (
 	sdk "github.com/conduitio/conduit-connector-sdk"
 
-	zeromq "github.com/mer-oscar/conduit-connector-zeromq"
+	zeromq "github.com/conduitio-labs/conduit-connector-zeromq"
 )
 
 func main() {

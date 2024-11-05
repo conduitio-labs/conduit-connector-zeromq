@@ -14,7 +14,7 @@
 
 package source
 
-import "github.com/mer-oscar/conduit-connector-zeromq/common"
+import "github.com/conduitio-labs/conduit-connector-zeromq/common"
 
 //go:generate paramgen -output=config_paramgen.go Config
 type Config struct {
