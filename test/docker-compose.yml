@@ -1,7 +1,8 @@
-version: '3.8'
-
-services:
-  zmq:
-    image: zeromq/zeromq
-    ports:
+services:  
+  zmq:    
+    build:      
+      context: .     
+      dockerfile: Dockerfile    
+    ports:      
       - "5555:5555"
+    command: ["sleep", "infinity"]
