@@ -61,12 +61,11 @@ func (d *Destination) Open(ctx context.Context) error {
 }
 
 func (d *Destination) Write(_ context.Context, records []opencdc.Record) (int, error) {
-	var written int
 	for _, rec := range records {
 		d.pubChannel.SendChan <- [][]byte{[]byte(d.config.Topic), rec.Bytes()}
 	}
 
-	return written, nil
+	return len(records), nil
 }
 
 func (d *Destination) Teardown(ctx context.Context) error {

@@ -29,7 +29,7 @@ func TestTeardown_NoOpen(t *testing.T) {
 	is.NoErr(err)
 }
 
+//nolint:paralleltest // incomplete test
 func TestWriteZeroMQ(t *testing.T) {
-	t.Parallel()
-	// is := is.New(t)
+	_ = is.New(t)
 }

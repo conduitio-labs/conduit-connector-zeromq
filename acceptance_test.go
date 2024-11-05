@@ -43,8 +43,6 @@ func TestAcceptance(t *testing.T) {
 					"TestSource_Open_ResumeAtPositionSnapshot",
 					"TestDestination_Write_Success",
 					"TestSource_Read_Success",
-					"TestSource_Read_SuccessSnapshot",
-					"TestSource_Read_SuccessCDC",
 				},
 				WriteTimeout: 500 * time.Millisecond,
 				ReadTimeout:  3000 * time.Millisecond,
