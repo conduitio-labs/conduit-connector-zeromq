@@ -26,8 +26,8 @@ type zeroMQAcceptanceTestDriver struct {
 	sdk.ConfigurableAcceptanceTestDriver
 }
 
-//nolint:paralleltest // we don't need the paralleltest here
 func TestAcceptance(t *testing.T) {
+	t.Parallel()
 	sdk.AcceptanceTest(t, zeroMQAcceptanceTestDriver{
 		ConfigurableAcceptanceTestDriver: sdk.ConfigurableAcceptanceTestDriver{
 			Config: sdk.ConfigurableAcceptanceTestDriverConfig{
