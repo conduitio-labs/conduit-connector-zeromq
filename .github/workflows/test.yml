@@ -1,4 +1,4 @@
-name: build
+name: test
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +15,11 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
+
+      - name: Install ZeroMQ
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libzmq3-dev libczmq-dev
 
       - name: Test
         run: make test-integration GOTEST_FLAGS="-v -count=1"
