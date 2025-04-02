@@ -1,0 +1,8 @@
+services:  
+  zmq:    
+    build:      
+      context: .     
+      dockerfile: Dockerfile    
+    ports:      
+      - "5555:5555"
+    command: ["sleep", "infinity"]

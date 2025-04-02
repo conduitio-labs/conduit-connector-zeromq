@@ -1,13 +1,14 @@
-.PHONY: build test test-integration generate install-paramgen install-tools golangci-lint-install
-
 VERSION=$(shell git describe --tags --dirty --always)
 
+.PHONY: build
 build:
-	go build -ldflags "-X 'github.com/mer-oscar/conduit-connector-zeromq.version=${VERSION}'" -o conduit-connector-zeromq cmd/connector/main.go
+	go build -ldflags "-X 'github.com/conduitio-labs/conduit-connector-zeromq.version=${VERSION}'" -o conduit-connector-zeromq cmd/connector/main.go
 
+.PHONY: test
 test:
 	go test $(GOTEST_FLAGS) -race ./...
 
+.PHONY: test-integration
 test-integration:
 	# run required docker containers, execute integration tests, stop containers after tests
 	docker compose -f test/docker-compose.yml up -d
@@ -15,16 +16,16 @@ test-integration:
 		docker compose -f test/docker-compose.yml down; \
 		exit $$ret
 
+.PHONY: generate
 generate:
 	go generate ./...
 
-install-paramgen:
-	go install github.com/conduitio/conduit-connector-sdk/cmd/paramgen@latest
-
+.PHONY: install-tools
 install-tools:
-	@echo Installing tools from tools.go
-	@go list -e -f '{{ join .Imports "\n" }}' tools.go | xargs -tI % go install %
+	@echo Installing tools from tools/go.mod
+	@go list -modfile=tools/go.mod tool | xargs -I % go list -modfile=tools/go.mod -f "%@{{.Module.Version}}" % | xargs -tI % go install %
 	@go mod tidy
 
+.PHONY: lint
 lint:
-	golangci-lint run -v
+	golangci-lint run
